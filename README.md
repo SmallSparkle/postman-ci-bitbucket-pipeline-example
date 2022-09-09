@@ -1,6 +1,6 @@
 # Postman Bitbucket pipeline example
 
-This project demonstrates using Newman to run Postman collections through the bitbucket CI system.
+This project demonstrates using Newman to run Postman collections through the bitbucket CI system on different environments.
 <br />
 <br />
 
@@ -9,16 +9,32 @@ This project demonstrates using Newman to run Postman collections through the bi
 All happens in the bitbucket.pipelines.yml file. Bitbucket Pipelines is creating an environment, using the Postman/Newman Docker image, and running the collection file in a container.
 Data preparation happens in run-tests.sh file.
 <br />
+<br />
 
-OAuth2.0 model is used for authorization. But it can be easily replaced.
+**OAuth2.0 model is used for authorization.**<br />
+<sub>But it can be easily replaced.
+<br />
 
-### To setup OAuth2.0
+To setup OAuth2.0
 
 use pre-script from tests/oauth2.0-prescript.js in the collection folder, set OAuth_Token as the authorization method, and inherit it in requests<br />
 $CLIENT_ID and $CLIENT_SECRET need to be added to [Bitbucket variables](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/).
 <br />
 
-For reporting to Slack is used [newman-reporter-slackmsg](https://github.com/jackcoded/newman-reporter-slackmsg)<br />
+**For environment setting up is used Bash script and custom steps**
+
+```bash
+if [ "$TEST_ENV" = "STAGING" ]; then
+    CLIENT_ID="$STAGING_CLIENT_ID"
+    CLIENT_SECRET="$STAGING_CLIENT_SECRET"
+    ENV_FILE="Staging.environment.json"
+    TEST_COLLECTION="./tests/Staging tests collections.postman_collection.json"
+fi
+```
+
+**For reporting to Slack is used [newman-reporter-slackmsg](https://github.com/jackcoded/newman-reporter-slackmsg)**
+<br />
+
 $SLACK_WEB_HOOK needs to be added to [Bitbucket variables](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/).
 
 ## How to run tests locally:
@@ -49,4 +65,4 @@ TEST_ENV='PRODUCTION' POSTMAN_FOLDER='FOLDER_PROD' POSTMAN_ITERATION_FILE='tests
 
 <br />
 
-A sample Bitbucket Pipeline project can be found [here](https://bitbucket.org/ddainton/postman-ci-pipeline-example/src/master/)
+A sample Bitbucket Pipeline project can be found **[here](https://bitbucket.org/ddainton/postman-ci-pipeline-example/src/master/)**
