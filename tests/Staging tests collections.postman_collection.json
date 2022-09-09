@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "28593c3c-c2d5-47b9-8a74-4821fa281145",
+		"name": "Staging tests collections",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "FOLDER_1",
+			"item": [
+				{
+					"name": "GET immage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var testData1 = pm.environment.get(`data1`);",
+									"",
+									"pm.test(`TEST GET immage - Check status code is 200`, function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"if(pm.response.code === 200) {",
+									"    pm.test(`TEST GET immage - Check body is correct`, function () {",
+									"        pm.response.to.be.withBody;",
+									"        // pm.response.to.be.jpeg;",
+									"    });",
+									"",
+									" } else {",
+									"    console.log(`GET immage ${testData1} Test responded `+ pm.response.code + ",
+									"    'Message: ' + pm.response.json().message + '. ' + `Tests weren't running`);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/image/jpeg",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"image",
+								"jpeg"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FOLDER_2",
+			"item": [
+				{
+					"name": "POST anything",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var testData1 = pm.environment.get(`data1`);",
+									"",
+									"pm.test(`${testData1} - Check status code is 200`, function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"if(pm.response.code === 200) {",
+									"    pm.test(`${testData1} - Check body is correct`, function () {",
+									"        pm.response.to.be.withBody;",
+									"        pm.response.to.be.json;",
+									"    });",
+									"",
+									" } else {",
+									"    console.log(`POST ${testData1} Test responded `+ pm.response.code + ",
+									"    'Message: ' + pm.response.json().message + '. ' + `Tests weren't running`);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/anything",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"anything"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// Get data from file and set to enviroment variables",
+							"if(!isRunningWithIterationData()) {",
+							"    return;",
+							"}",
+							"",
+							"setIterationVariables();",
+							"",
+							"function isRunningWithIterationData() {",
+							"    return pm.iterationData && pm.iterationData.has(\"id\");",
+							"}",
+							"",
+							"function setIterationVariables() {",
+							"    let data1FromFile = pm.iterationData.get(\"data1\");",
+							"    ",
+							"    pm.environment.set(\"data1\", data1FromFile);",
+							"}"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}

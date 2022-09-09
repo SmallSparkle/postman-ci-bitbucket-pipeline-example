@@ -1,0 +1,35 @@
+image: postman/newman
+
+# run tests from 'PROD tests collections' with PROD.environment.json use test data from file
+  - productionTests: &productionTests
+      name: 'Run "Production tests"'
+      script:
+        - apk add jq
+        - npm i -g newman-reporter-slackmsg
+        - TEST_ENV='PRODUCTION' POSTMAN_FOLDER='FOLDER_PROD' POSTMAN_ITERATION_FILE='tests-data/PROD-test-data.json' ./run-tests.sh
+
+  - smokeTests: &smokeTests
+      name: 'Run "Smoke tests" tests'
+      script:
+        - apk add jq
+        - npm i -g newman-reporter-slackmsg
+        - TEST_ENV='STAGING' POSTMAN_FOLDER='FOLDER_1' POSTMAN_ITERATION_FILE='' ./run-tests.sh
+
+  - stagingTests: &stagingTests
+      name: 'Run "Booking workflow" tests'
+      script:
+        - apk add jq
+        - npm i -g newman-reporter-slackmsg
+        - TEST_ENV='STAGING' POSTMAN_FOLDER='FOLDER_2' POSTMAN_ITERATION_FILE='tests-data/Staging-test-data.json' ./run-tests.sh
+pipelines:
+  default:
+    - step: *smokeTests
+    - step: *stagingTests
+
+  custom:
+
+    smoke-tests:
+      - step: *smokeTests
+
+    production-tests:
+      - step: *productionTests  
