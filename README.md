@@ -1,6 +1,6 @@
 # Postman Bitbucket pipeline example
 
-This project demonstrates using Newman to run Postman collections through the bitbucket CI system on different environments.
+This project demonstrates using Newman to run Postman collections through the bitbucket CI system in different environments.
 <br />
 <br />
 
