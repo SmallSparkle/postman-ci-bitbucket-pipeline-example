@@ -21,7 +21,7 @@ use pre-script from tests/oauth2.0-prescript.js in the collection folder, set OA
 $CLIENT_ID and $CLIENT_SECRET need to be added to [Bitbucket variables](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/).
 <br />
 
-**For environment setting up is used Bash script and custom steps**
+**For environment setting up is used Bash script and custom steps in pipeline**
 
 ```bash
 if [ "$TEST_ENV" = "STAGING" ]; then
