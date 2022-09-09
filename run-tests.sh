@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 if test -z "$TEST_ENV" 
 then
@@ -16,7 +16,7 @@ fi
 if [ "$TEST_ENV" = "PRODUCTION" ]; then
     CLIENT_ID="$PROD_CLIENT_ID"
     CLIENT_SECRET="$PROD_CLIENT_SECRET"
-    ENV_FILE="PROD.environment.json"
+    ENV_FILE="Production.environment.json"
     TEST_COLLECTION="./tests/PROD tests collections.postman_collection.json"
 fi
 
@@ -48,7 +48,7 @@ fi
 
 if test -z "$ENV_FILE" 
 then
-    echo "\$TR_ENV_FILE is empty"
+    echo "\$ENV_FILE is empty"
     exit 1
 fi
 
@@ -62,17 +62,15 @@ echo "Run newman tests for $POSTMAN_FOLDER"
 
 newman run "$TEST_COLLECTION"  --folder "$POSTMAN_FOLDER" \
     -e ./environment/$ENV_FILE \
-    # client_id and client_secret to setup OAuth2.0
     --env-var "clientId=$CLIENT_ID" \
     --env-var "clientSecret=$CLIENT_SECRET" \
     --suppress-exit-code \
     -r slackmsg,cli,json \
-    # reporter to slack 
     --reporter-slackmsg-webhookurl "$SLACK_WEB_HOOK" \
     --reporter-slackmsg-environment "$TEST_ENV" \
     --reporter-slackmsg-collection "$POSTMAN_FOLDER" \
     --reporter-json-export test-outputfile.json \
-    # file with test data
     --iteration-data "$POSTMAN_ITERATION_FILE" 
 
+# make pipeline red if tests fail
 jq '[.run.stats[].failed] | add' test-outputfile.json | grep -w "0"
